@@ -88,6 +88,54 @@ def emprestar_livro():
             print(f"Empréstimo não foi realizado, pois não há cópias disponíveis de '{livro.titulo}' em nosso sistema.'")
             print()
 
+#def para listar livros
+def listar_livros():
+  if not livros:
+    print("\nNenhum livro cadastrado.")
+    return
+
+  ordem_livros = list(livros.items())
+
+  print("\n-----------Listar Livros-----------")
+  while ordem_livros:
+    isbn, livro = ordem_livros.pop()
+    print(f"\nISBN: {isbn}\nTítulo: {livro.titulo}\nAutor: {livro.autor}\nCópias Disponíveis: {livro.num_copias}")
+  print("-"*35)
+
+#def para listar usuários
+def listar_usuarios():
+  if not usuarios:
+    print("\nNenhum usuário cadastrado.")
+    return
+
+  ordem_usuarios = list(usuarios.items())
+
+  print("\n-----------Listar Usuários-----------")
+  while ordem_usuarios:
+    id_usuario, usuario = ordem_usuarios.pop()
+    print(f"\nID: {id_usuario}\nNome: {usuario.nome}")
+  print("-"*37)
+
+
+#def para listar os empréstimos
+def listar_emprestimos():
+    if not emprestimos:
+        print("\nNenhum empréstimo registrado.")
+        return
+
+    ordem_emprestimos = list(emprestimos.items())
+
+    print("\n-----------Listar Empréstimos-----------")
+    while ordem_emprestimos:
+        (isbn, id_usuario), data = ordem_emprestimos.pop()
+        livro = livros.get(isbn)
+        usuario = usuarios.get(id_usuario)
+        data_formatada = data.strftime("%Y-%m-%d %H:%M")
+
+        print(f"\nRA: {id_usuario}\nNome: {usuario.nome}\nISBM do livro: {isbn}\nTítulo: {livro.titulo}\nAutor: {livro.autor}\nData do empréstimo: {data_formatada}")
+    print("-"*40)
+
+
 def exibir_menu_principal():
     print(f"""
 📚 Sistema de Controle de Biblioteca 📚
@@ -127,6 +175,15 @@ if __name__ == "__main__":
 
         elif opcao == '3':
             emprestar_livro()
+
+        elif opcao == '7':
+            listar_livros()
+
+        elif opcao == '8':
+            listar_usuarios()
+
+        elif opcao == '9':
+            listar_emprestimos()
 
         elif opcao == '10':
             print("Saindo do sistema.. Até mais!")
