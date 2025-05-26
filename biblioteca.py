@@ -26,7 +26,7 @@ class Usuario:
 
 
 def cadastrar_livro():
-    print("\n-- Cadastro de Livro --")
+    print("\n---Cadastro de Livro----")
     isbn = input("Digite o ISBN do livro: ")
     if isbn in livros: 
         print("Livro com este ISBN já cadastrado em nosso sistema.")
@@ -57,11 +57,11 @@ def cadastrar_usuario():
 
 
 def emprestar_livro():
-    print("\n--Empréstimo de Livros--")
-    id_cliente = input("Digite o ID do usuario: ") 
+    print("\n---Empréstimo de Livros---")
+    id_usuario = input("Digite o ID do usuario: ") 
     isbn = input("Digite o ISBN do Livro a ser emprestado:")
 
-    if id_cliente not in usuarios: 
+    if id_usuario not in usuarios: 
         print("Cliente não encontrado em sistema.")
         print()
         return
@@ -72,19 +72,19 @@ def emprestar_livro():
 
     livro = livros[isbn]
     if livro.num_copias > 0:
-        chave_emprestimo = (isbn, id_cliente) 
+        chave_emprestimo = (isbn, id_usuario) 
         data_e_hora_do_momento = datetime.datetime.now()
         emprestimos[chave_emprestimo] = data_e_hora_do_momento
         livro.num_copias -= 1
         data_formatada_para_exibicao = data_e_hora_do_momento.strftime("%Y-%m-%d %H:%M")
-        print(f"Livro '{livro.titulo}' emprestado para o cliente '{usuarios[id_cliente].nome}' em {data_formatada_para_exibicao}.")
+        print(f"Livro '{livro.titulo}' emprestado para o cliente '{usuarios[id_usuario].nome}' em {data_formatada_para_exibicao}.")
     else:
         entrar_fila = input(f"Não há cópias desse livro disponíveis de '{livro.titulo}'. Deseja entrar na fila de espera? (sim | não ): ").lower()
         if entrar_fila == 'sim':
-            if id_cliente in livro.fila_espera:
+            if id_usuario in livro.fila_espera:
                 print(f"Você já está na fila de espera para '{livro.titulo}'.")
             else:
-                livro.fila_espera.append(id_cliente) 
+                livro.fila_espera.append(id_usuario) 
                 print(f"Você entrou na fila de espera para o livro: '{livro.titulo}'.")
         else:
             print(f"Empréstimo não foi realizado, pois não há cópias disponíveis de '{livro.titulo}' em nosso sistema.'")
