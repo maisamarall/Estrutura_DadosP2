@@ -51,3 +51,25 @@ Não são necessárias dependências adicionais além do Python padrão.
 ### Por *Jênie Danielle*
 ---
 ### Por *Simone Siqueira*
+
+* **Listagem de Livros Cadastrados:** 
+    * Permite ver os livros cadastrados, com as suas respectivas informações (ISBN, autor, título e número de cópias).
+
+* **Listagem de usuários Cadastrados:** 
+    * Permite ver os usuários cadastrados, com as suas respectivas informações (ID do usuário e nome)
+
+* **Listagem de empréstimos realizados:** 
+    *Permite ver os empréstimos realizados pelos usuários, com as suas respectivas informações (ID do usuário, nome do usuário, ISBN, título do livro, autor e a data em que o empréstimo foi realizado — essa data será atualizada conforme a renovação do livro).
+
+* **Padronização das funções de listagem** 
+    *Conforme a criação das minhas funções, estabeleci um modelo padrão para as listagens, com o objetivo de economizar tempo e manter o código organizado. Todas as funções seguem a mesma estrutura lógica: verificação do dicionário, conversão em lista de tuplas e exibição das informações.
+
+* **Verificação de dicionários vazios** 
+    *Adicionei uma condição em cada função para verificar se os dicionários (`livros`, `usuarios`, `emprestimos`) estão vazios. Caso estejam, uma mensagem será exibida (`“Nenhum livro cadastrado”`, `“Nenhum usuário cadastrado”` ou `“Nenhum empréstimo registrado”`), evitando assim erros e exibindo uma resposta clara.
+
+* **Uso de variável para guardar os elementos dos dicionários** 
+    *Após a verificação, os dicionários são convertidos para listas de tuplas utilizando o método `.items()`, o que facilita a manipulação e ordenação dos dados no momento da listagem
+
+* **Uso da estrutura de pilha nas listagens** 
+    *Para exibir primeiro os elementos mais recentemente cadastrados, utilizei uma abordagem baseada na estrutura de dados tipo pilha. Ao transformar os dicionários em listas, apliquei o método `.pop()` dentro de um laço `while`, que remove e retorna sempre o último item da lista. Dessa forma, os registros mais recentes são listados no topo, o que melhora a visualização dos dados.
+
