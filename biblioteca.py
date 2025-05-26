@@ -3,6 +3,8 @@ import datetime
 emprestimos = {}
 livros = {}
 usuarios = {}
+historico_renovacoes= {}
+
 
 class Livro:
     def __init__(self, titulo, autor, num_copias):
@@ -88,6 +90,95 @@ def emprestar_livro():
             print(f"Empréstimo não foi realizado, pois não há cópias disponíveis de '{livro.titulo}' em nosso sistema.'")
             print()
 
+def obter_validar_dados():
+    while True:
+        id_usuario = input("Digite o ID do usuario (ou 'sair' para sair): ") 
+        if id_usuario.lower() == "sair":
+            return None, None
+        if id_usuario not in usuarios:
+            continuar = input("ID de usuário não encontrado.\nDeseja tentar novamente? (s | n): ").lower()
+            if continuar != "s":
+                return None, None
+            continue
+        
+        isbn = input("Digite o ISBN do Livro a ser devolvido:")
+        if isbn.lower() == "sair":
+            return None, None
+        if isbn not in livros:
+            continuar = input("ID de usuário não encontrado.\nDeseja tentar novamente? (s | n): ").lower()
+            if continuar != "s":
+                return None, None
+            continue
+
+        return id_usuario, isbn
+
+def devolver_emprestimo():
+    print("\n-- Devolução de Empréstimo --\n")
+    id_usuario, isbn = obter_validar_dados()
+    chave = (isbn, id_usuario)
+    if not id_usuario or not isbn:
+        print("Operação cancelada. Voltando ao menu.")
+        return
+
+    if chave not in emprestimos:
+        print("Nenhum empréstimo encontrado para esse usuário e livro.")
+        return
+    
+    livro = livros[isbn]
+    livro.num_copias += 1
+    del emprestimos[chave]
+
+    print(f"Livro '{livro.titulo}' devolvido com sucesso.")
+
+    if livro.fila_espera:
+        proximo_id = livro.fila_espera.pop(0)
+        nova_chave = (isbn, proximo_id)
+        emprestimos[nova_chave] = datetime.datetime.now()
+        livro.num_copias -= 1
+        print(f"O próximo da fila é '{usuarios[proximo_id].nome}' (RA: {proximo_id}).")
+
+
+def renovar_emprestimo():
+    print("\n-- Renovação de Empréstimo --")
+
+    id_usuario, isbn = obter_validar_dados()
+    chave = (isbn, id_usuario)
+    if not id_usuario or not isbn:
+        print("Operação cancelada. Voltando ao menu.")
+        return
+
+    if chave not in emprestimos:
+       print("Empréstimo não encontrado...")
+       return
+    
+    nova_data = datetime.datetime.now()
+    emprestimos[chave] = nova_data
+
+    if chave not in historico_renovacoes:
+       historico_renovacoes[chave] = []
+
+    historico_renovacoes[chave].append(nova_data)
+
+    print(f"Empréstimo do livro '{livros[isbn].titulo}' foi renovado em {nova_data.date()}.")
+    print(f"Total de renovações: {len(historico_renovacoes[chave])}")
+
+def buscar_livros():
+    print("\n-- Buscar Livros --")
+
+    pesquisa = input("Digite o nome do título ou do autor: ").lower()
+
+    encontrados = False
+
+    for isbn, livro in livros.items():
+        if pesquisa in livro.titulo.lower() or pesquisa in livro.autor.lower():
+            print(f"Título: {livro.titulo} \nAutor: {livro.autor} \nCópias disponíveis: {livro.num_copias}")
+            encontrados = True
+
+    if not encontrados:
+       print("Nenhum livro ou autor encontrado com essa pesquisa...")
+
+
+
 #def para listar livros
 def listar_livros():
   if not livros:
@@ -163,18 +254,27 @@ if __name__ == "__main__":
             cadastrar_livro()
             print("\n-- Conteúdo atual de livros--")
             for isbn_livro, obj_livro in livros.items():
-                print(f"ISBN: {isbn_livro}, Título: {obj_livro.titulo}, Cópias {obj_livro.num_copias}")
+                print(f"\nISBN: {isbn_livro}\nTítulo: {obj_livro.titulo}\nCópias {obj_livro.num_copias}")
             print("-" * 30)
 
         elif opcao == '2':
             cadastrar_usuario()
             print("\n-- Conteúdo atual de usuarios ")
             for id_usuario, obj_usuario in usuarios.items():
-                print(f"ID: {obj_usuario.id_usuario}, Nome: {obj_usuario.nome}")
+                print(f"\nID: {obj_usuario.id_usuario}\nNome: {obj_usuario.nome}")
             print("-" * 30)
 
         elif opcao == '3':
             emprestar_livro()
+
+        elif opcao == '4':
+            devolver_emprestimo()
+
+        elif opcao == '5':
+            renovar_emprestimo()
+
+        elif opcao == '6':
+            buscar_livros()
 
         elif opcao == '7':
             listar_livros()
