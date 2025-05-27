@@ -1,5 +1,6 @@
 import datetime
 from models import Livro, Usuario
+from arvore_binaria import ArvoreBinaria
 
 class Biblioteca:
     def __init__(self):
@@ -7,6 +8,7 @@ class Biblioteca:
         self.livros = {}
         self.usuarios = {}
         self.historico_renovacoes= {}
+        self.arvore_titulos = ArvoreBinaria()
 
     def cadastrar_livro(self):
         print("\n-- Cadastro de Livro --")
@@ -25,6 +27,7 @@ class Biblioteca:
             print("Número de cópias inválido. Digite um número inteiro.")
             return
         self.livros[isbn] = Livro(titulo, autor, num_copias)
+        self.arvore_titulos.inserir(titulo, self.livros[isbn])
         print(f"Livro '{titulo}' cadastrado com sucesso!")
 
 
@@ -71,10 +74,10 @@ class Biblioteca:
             else:
                 print(f"Empréstimo não foi realizado, pois não há cópias disponíveis de '{livro.titulo}' em nosso sistema.'\n")
 
-
+    #função para obter os dados de id e isbn e garantir que eles já existam
     def obter_validar_dados(self):
         while True:
-            id_usuario = input("Digite o ID do usuario (ou 'sair' para sair): ") 
+            id_usuario = input("Digite o ID do usuário (ou 'sair' para sair): ") 
             if id_usuario.lower() == "sair":
                 return None, None
             if id_usuario not in self.usuarios:
@@ -83,7 +86,7 @@ class Biblioteca:
                     return None, None
                 continue
             
-            isbn = input("Digite o ISBN do Livro a ser devolvido:")
+            isbn = input("Digite o ISBN do Livro:")
             if isbn.lower() == "sair":
                 return None, None
             if isbn not in self.livros:
@@ -94,10 +97,13 @@ class Biblioteca:
 
             return id_usuario, isbn
 
+    #função para devolver o empréstimo, também atualiza a qtd de cópias disponiveis e atualiza a fila de espera
     def devolver_emprestimo(self):
         print("\n-- Devolução de Empréstimo --\n")
+
         id_usuario, isbn = self.obter_validar_dados()
         chave = (isbn, id_usuario)
+
         if not id_usuario or not isbn:
             print("Operação cancelada. Voltando ao menu.")
             return
@@ -119,6 +125,7 @@ class Biblioteca:
             livro.num_copias -= 1
             print(f"O próximo da fila é '{self.usuarios[proximo_id].nome}' (ID: {proximo_id}).")
 
+    #função de renovar os emprestimos e garantir que não sejam feitas 2 renovações no mesmo dia pelo mesmo usuário
     def renovar_emprestimo(self):
         print("\n-- Renovação de Empréstimo --")
 
@@ -133,33 +140,41 @@ class Biblioteca:
             print("Empréstimo não encontrado...")
             return
         
-        nova_data = datetime.datetime.now()
-        self.emprestimos[chave] = nova_data
+        hoje = datetime.date.today()
 
         if chave not in self.historico_renovacoes:
-            self.historico_renovacoes[chave] = []
+            self.historico_renovacoes[chave] = set()
 
-        self.historico_renovacoes[chave].append(nova_data)
+        if hoje in self.historico_renovacoes[chave]:
+            print("Esse empréstimo já foi renovado hoje...")
+            return
+        
+        nova_data = datetime.datetime.now()
+        self.emprestimos[chave] = nova_data
+        self.historico_renovacoes[chave].add(hoje)
 
         print(f"Empréstimo do livro '{self.livros[isbn].titulo}' foi renovado em {nova_data.date()}.")
         print(f"Total de renovações: {len(self.historico_renovacoes[chave])}")
 
+    #função para listar os livros usando a árvore binária para uma pesquisa mais eficiente
     def buscar_livros(self):
         print("\n-- Buscar Livros --")
+        pesquisa = input("Digite o título do livro: ").lower()
 
-        pesquisa = input("Digite o nome do título ou do autor: ").lower()
+        resultado = self.arvore_titulos.buscar(pesquisa)
 
-        encontrados = False
+        if resultado:
+            print(f"Título: {resultado.titulo} \nAutor: {resultado.autor} \nCópias disponíveis: {resultado.num_copias}")
+        else:
+            print("Nenhum livro ou autor encontrado com esse título...")
 
-        for isbn, livro in self.livros.items():
-            if pesquisa in livro.titulo.lower() or pesquisa in livro.autor.lower():
-                print(f"Título: {livro.titulo} \nAutor: {livro.autor} \nCópias disponíveis: {livro.num_copias}")
-                encontrados = True
-
-        if not encontrados:
-            print("Nenhum livro ou autor encontrado com essa pesquisa...")
-
-
+        # encontrados = False
+        # for isbn, livro in self.livros.items():
+        #     if pesquisa in livro.titulo.lower() or pesquisa in livro.autor.lower():
+        #         print(f"Título: {livro.titulo} \nAutor: {livro.autor} \nCópias disponíveis: {livro.num_copias}")
+        #         encontrados = True
+        # if not encontrados:
+        #     print("Nenhum livro ou autor encontrado com essa pesquisa...")
 
     def listar_livros(self):
         if not self.livros:
