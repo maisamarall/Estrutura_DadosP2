@@ -28,6 +28,15 @@ Não são necessárias dependências adicionais além do Python padrão.
 
 ---
 
+## 🗂️ Organização dos Arquivos
+
+- `main.py`: Exibe o meni principal e chama os métodos da classe `Biblioteca`.
+- `biblioteca.py`: Contém a lógica do sistema e todas as funcionalidades principais.
+- `models.py`: Define as classes `Livro` e `Usuario`.
+- `arvore_binaria.py`: Implememnta a árvore binária por titulo de livro.
+
+---
+
 ## ✨ Funcionalidades Implementadas
 
 ### Por *Maisa Amaral*
@@ -49,6 +58,19 @@ Não são necessárias dependências adicionais além do Python padrão.
     * **Por quê:** Gerenciam a **ordem** dos usuários que aguardam por um livro específico.
 ---
 ### Por *Jênie Danielle*
+
+* **Devolver Empréstimos:**
+    * Verifica se o empréstimo existe, se existir, remove o registro e aumenta o número de cópias disponíveis. Caso tenha fila de espera, também passa para o próximo usuário.
+
+* **Renovar Empréstimo:**
+    * Verifica se o empréstimo existe, se existir, atualiza a data do empréstimo para o momento atual e impede que o mesmo empréstimo seja renovado mais de uma vez no mesmo dia.
+    * `set()` foi usado para guardar as datas e evitar duplicações.
+ 
+* **Buscar Livro por Título:**
+    * Utiliza a `árvore binária` para buscar um livro de forma rápida e eficiente. A busca é feita por título exato, e se o livro for encontrado, as informações de título, autor, cópias sao exibidas.
+ 
+* **Validação de dados:** A função de obter_validar_dados() auxilia a coleta e validação dos dados inseridos do usuário e do livro, permitindo que o usuário cancele a qualquer momento e evita a duplicação de códigos.
+  
 ---
 ### Por *Simone Siqueira*
 
