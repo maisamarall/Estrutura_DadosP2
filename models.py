@@ -15,3 +15,14 @@ class Usuario:
 
     def __str__(self):
         return f"Nome: {self.nome}, ID: {self.id_usuario}" 
+
+class RegistroEmprestimo:
+    def __init__(self, isbn, id_usuario, data, status):
+        self.isbn = isbn
+        self.id_usuario = id_usuario
+        self.data = data
+        self.status = status 
+
+    def __str__(self):
+        data_formatada = self.data.strftime("%Y-%m-%d %H:%M")
+        return f"ID: {self.id_usuario}, ISBN: {self.isbn}, Data: {data_formatada}, Status: {self.status.captalize()}"
