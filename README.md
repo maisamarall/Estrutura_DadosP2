@@ -81,13 +81,19 @@ Não são necessárias dependências adicionais além do Python padrão.
     * Permite ver os usuários cadastrados, com as suas respectivas informações (ID do usuário e nome)
 
 * **Listagem de empréstimos realizados:** 
-    *Permite ver os empréstimos realizados pelos usuários, com as suas respectivas informações (ID do usuário, nome do usuário, ISBN, título do livro, autor e a data em que o empréstimo foi realizado — essa data será atualizada conforme a renovação do livro).
+    * Permite visualizar todos os empréstimos feitos pelos usuários, incluindo informações como ID e nome do usuário, ISBN, título e autor do livro, data do empréstimo (que é atualizada em caso de renovação) e o status (`emprestado`, `renovado` ou `devolvido`).
+
+    * Para isso, foi criada a classe `RegistroEmprestimo`, que representa cada empréstimo com os dados mencionados.
+
+    * Dentro da classe principal (como Biblioteca), há uma lista chamada `self.registro_emprestimos` que armazena todas as instâncias de `RegistroEmprestimo`, funcionando como um histórico.
+
+    * Cada vez que um empréstimo é realizado, é criada uma variável `registro` com uma nova instância da classe `RegistroEmprestimo`, e ela é adicionada à lista para manter a ordem cronológica dos empréstimos.
 
 * **Padronização das funções de listagem** 
-    *Conforme a criação das minhas funções, estabeleci um modelo padrão para as listagens, com o objetivo de economizar tempo e manter o código organizado. Todas as funções seguem a mesma estrutura lógica: verificação do dicionário, conversão em lista de tuplas e exibição das informações.
+    *Conforme a criação das minhas funções, estabeleci um modelo padrão para as listagens, com o objetivo de economizar tempo e manter o código organizado. Todas as funções seguem a mesma estrutura lógica: verificação do dicionário e lista, conversão em lista de tuplas(somente a lista `registro_emprestimo` que permanece a mesma) e exibição das informações.
 
 * **Verificação de dicionários vazios** 
-    *Adicionei uma condição em cada função para verificar se os dicionários (`livros`, `usuarios`, `emprestimos`) estão vazios. Caso estejam, uma mensagem será exibida (`“Nenhum livro cadastrado”`, `“Nenhum usuário cadastrado”` ou `“Nenhum empréstimo registrado”`), evitando assim erros e exibindo uma resposta clara.
+    *Adicionei uma condição em cada função para verificar se os dicionários (`livros` e `usuarios`) e a lista `resistro_emprestimos`estão vazios. Caso estejam, uma mensagem será exibida (`“Nenhum livro cadastrado”`, `“Nenhum usuário cadastrado”` ou `“Nenhum empréstimo registrado”`), evitando assim erros e exibindo uma resposta clara.
 
 * **Uso de variável para guardar os elementos dos dicionários** 
     *Após a verificação, os dicionários são convertidos para listas de tuplas utilizando o método `.items()`, o que facilita a manipulação e ordenação dos dados no momento da listagem
