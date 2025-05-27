@@ -90,14 +90,14 @@ Não são necessárias dependências adicionais além do Python padrão.
     * Cada vez que um empréstimo é realizado, é criada uma variável `registro` com uma nova instância da classe `RegistroEmprestimo`, e ela é adicionada à lista para manter a ordem cronológica dos empréstimos.
 
 * **Padronização das funções de listagem** 
-    *Conforme a criação das minhas funções, estabeleci um modelo padrão para as listagens, com o objetivo de economizar tempo e manter o código organizado. Todas as funções seguem a mesma estrutura lógica: verificação do dicionário e lista, conversão em lista de tuplas(somente a lista `registro_emprestimo` que permanece a mesma) e exibição das informações.
+    * Conforme a criação das minhas funções, estabeleci um modelo padrão para as listagens, com o objetivo de economizar tempo e manter o código organizado. Todas as funções seguem a mesma estrutura lógica: verificação do dicionário e lista, conversão em lista de tuplas(somente a lista `registro_emprestimo` que permanece a mesma) e exibição das informações.
 
 * **Verificação de dicionários vazios** 
-    *Adicionei uma condição em cada função para verificar se os dicionários (`livros` e `usuarios`) e a lista `resistro_emprestimos`estão vazios. Caso estejam, uma mensagem será exibida (`“Nenhum livro cadastrado”`, `“Nenhum usuário cadastrado”` ou `“Nenhum empréstimo registrado”`), evitando assim erros e exibindo uma resposta clara.
+    * Adicionei uma condição em cada função para verificar se os dicionários (`livros` e `usuarios`) e a lista `resistro_emprestimos`estão vazios. Caso estejam, uma mensagem será exibida (`“Nenhum livro cadastrado”`, `“Nenhum usuário cadastrado”` ou `“Nenhum empréstimo registrado”`), evitando assim erros e exibindo uma resposta clara.
 
 * **Uso de variável para guardar os elementos dos dicionários** 
-    *Após a verificação, os dicionários são convertidos para listas de tuplas utilizando o método `.items()`, o que facilita a manipulação e ordenação dos dados no momento da listagem
+    * Após a verificação, os dicionários são convertidos para listas de tuplas utilizando o método `.items()`, o que facilita a manipulação e ordenação dos dados no momento da listagem
 
 * **Uso da estrutura de pilha nas listagens** 
-    *Para exibir primeiro os elementos mais recentemente cadastrados, utilizei uma abordagem baseada na estrutura de dados tipo pilha. Ao transformar os dicionários em listas, apliquei o método `.pop()` dentro de um laço `while`, que remove e retorna sempre o último item da lista. Dessa forma, os registros mais recentes são listados no topo, o que melhora a visualização dos dados.
+    * Para exibir primeiro os elementos mais recentemente cadastrados, utilizei uma abordagem baseada na estrutura de dados tipo pilha. Ao transformar os dicionários em listas, apliquei o método `.pop()` dentro de um laço `while`, que remove e retorna sempre o último item da lista. Dessa forma, os registros mais recentes são listados no topo, o que melhora a visualização dos dados.
 
