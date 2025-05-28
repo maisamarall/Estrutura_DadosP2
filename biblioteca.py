@@ -1,6 +1,7 @@
 import datetime
 from models import Livro, Usuario, RegistroEmprestimo
 from arvore_binaria import ArvoreBinaria
+from models import ListaUsuarios
 
 class Biblioteca:
     def __init__(self):
@@ -10,6 +11,7 @@ class Biblioteca:
         self.usuarios = {}
         self.historico_renovacoes= {}
         self.arvore_titulos = ArvoreBinaria()
+        self.usuarios_ativos = ListaUsuarios()
 
     def cadastrar_livro(self):
         print("\n-- Cadastro de Livro --")
@@ -41,6 +43,7 @@ class Biblioteca:
         nome = input("Digite o nome do usuário: ")
         self.usuarios[id_usuario] = Usuario(nome, id_usuario) 
         print(f"Usuário '{nome}' cadastrado com sucesso!")
+        self.usuarios_ativos.adicionarUsuario(nome)
 
 
     def emprestar_livro(self):
@@ -66,6 +69,8 @@ class Biblioteca:
             self.registro_emprestimos.append(registro)
             data_formatada_para_exibicao = data_e_hora_do_momento.strftime("%Y-%m-%d %H:%M")
             print(f"Livro '{livro.titulo}' emprestado para o cliente '{self.usuarios[id_usuario].nome}' em {data_formatada_para_exibicao} status ({registro.status}).")
+            self.usuarios_ativos.adicionarUsuario(self.usuarios[id_usuario].nome)
+
         else:
             entrar_fila = input(f"Não há cópias desse livro disponíveis de '{livro.titulo}'. Deseja entrar na fila de espera? (sim | não ): ").lower()
             if entrar_fila == 'sim':
@@ -122,6 +127,7 @@ class Biblioteca:
         del self.emprestimos[chave]
 
         print(f"Livro '{livro.titulo}' ({registro.status}) com sucesso.")
+        self.usuarios_ativos.adicionarUsuario(self.usuarios[id_usuario].nome)
 
         if livro.fila_espera:
             proximo_id = livro.fila_espera.pop(0)
@@ -151,7 +157,7 @@ class Biblioteca:
             self.historico_renovacoes[chave] = set()
 
         if hoje in self.historico_renovacoes[chave]:
-            print("Esse empréstimo já foi renovado hoje...")
+            print("Esse empréstimo já foi renovado hoje, tente novamente amanhã...")
             return
         
         nova_data = datetime.datetime.now()
@@ -162,6 +168,7 @@ class Biblioteca:
         self.registro_emprestimos.append(registro)
 
         print(f"Empréstimo do livro '{self.livros[isbn].titulo}' foi ({registro.status}) em {nova_data.date()}.")
+        self.usuarios_ativos.adicionarUsuario(self.usuarios[id_usuario].nome)
         print(f"Total de renovações: {len(self.historico_renovacoes[chave])}")
 
     #função para listar os livros usando a árvore binária para uma pesquisa mais eficiente
@@ -226,3 +233,22 @@ class Biblioteca:
             data_formatada = registro.data.strftime("%Y-%m-%d %H:%M")
             print(f"\nID: {usuario.id_usuario}\nNome: {usuario.nome}\nISBM do livro: {registro.isbn}\nTítulo: {livro.titulo}\nAutor: {livro.autor}\nData do empréstimo: {data_formatada}\nStatus: {registro.status.capitalize()}")
         print("-"*40)
+
+    def exibir_usuariosAtivos(self):
+        print("\n-- Últimos usuários Ativos --")
+        if not self.usuarios_ativos.topo:
+            print("Nenhum usuário ativo registrado ainda.")
+            return
+        
+        nomes_exibidos = set()
+        atual = self.usuarios_ativos.topo
+        posicao = 1
+        
+        # atual = self.usuarios_ativos.topo
+        # posicao = 1
+        while atual:
+            if atual.nome not in nomes_exibidos:
+                print(f"{posicao}. {atual.nome}")
+                nomes_exibidos.add(atual.nome)
+                posicao += 1
+            atual = atual.proximo
