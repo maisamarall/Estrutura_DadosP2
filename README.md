@@ -70,6 +70,12 @@ Não são necessárias dependências adicionais além do Python padrão.
     * Utiliza a `árvore binária` para buscar um livro de forma rápida e eficiente. A busca é feita por título exato, e se o livro for encontrado, as informações de título, autor, cópias sao exibidas.
  
 * **Validação de dados:** A função de obter_validar_dados() auxilia a coleta e validação dos dados inseridos do usuário e do livro, permitindo que o usuário cancele a qualquer momento e evita a duplicação de códigos.
+
+* **Exibir usuários ativos:**
+    * Exibe a lista dos últimos usuários que realizaram alguma ação (empréstimo, devolução ou renovação de livros) no sistema. A lista é gerenciada como uma estrutura de lista encadeada, limitada a uma quantidade máxima de 5 usuários, garantindo que apenas os mais recentes sejam mostrados e sem repetições de nomes.
+ 
+* **Listar fila de espera:**
+    * Mostra a lista de espera por livro, com os usuários que optaram por aguardar a disponibilidade de um livro.
   
 ---
 ### Por *Simone Siqueira*
