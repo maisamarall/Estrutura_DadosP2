@@ -252,3 +252,22 @@ class Biblioteca:
                 nomes_exibidos.add(atual.nome)
                 posicao += 1
             atual = atual.proximo
+    
+    def listar_filaEspera(self):
+        print("\n-- Lista de Espera por Livro --")
+        encontrou_fila = False
+        
+        for isbn, livro in self.livros.items():
+            if livro.fila_espera:
+                encontrou_fila = True
+                print(f"\nLivro: {livro.titulo} (ISBN: {isbn})")
+                for posicao, id_usuario in enumerate(livro.fila_espera, start=1):
+                    usuario = self.usuarios.get(id_usuario)
+                    if usuario:
+                        print(f" {posicao} - {usuario.nome} (ID: {id_usuario})")
+                    else:
+                        print(f" {posicao} - [Usuário não encontrado] (ID: {id_usuario})")
+
+        
+        if not encontrou_fila:
+            print("Nenhum livro possui fila de espera no momento.")

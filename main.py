@@ -19,7 +19,9 @@ Selecione uma opção:
 - 7. Listar Livros
 - 8. Listar Usuários
 - 9. Listar Empréstimos
-- 10. Sair
+- 10. Listar Fila de Espera
+- 11. Exibir Últimos Usuários Ativos 
+- 12. Sair
 {"-" * 42}
         """)
 
@@ -60,6 +62,12 @@ Selecione uma opção:
             biblioteca.listar_emprestimos()
 
         elif opcao == '10':
+            biblioteca.listar_filaEspera()
+
+        elif opcao == '11':
+            biblioteca.exibir_usuariosAtivos()
+
+        elif opcao == '12':
             print("Saindo do sistema.. Até mais!")
             break
         else:
